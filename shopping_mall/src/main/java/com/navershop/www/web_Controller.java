@@ -4,7 +4,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -15,11 +17,47 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 public class web_Controller {
 	
 	PrintWriter pw = null;
+	
+	@GetMapping("/restapi.do")
+	//@SessionAttribute : session이 이미 등록되어 있는 상황일 경우 해당 정보를 가져올 수 있음
+	public String restapi(@SessionAttribute(name = "mid", required = false) String mid) throws Exception{
+		if(mid==null) {
+			System.out.println("로그인 해야 결제내역을 확인 할 수 있습니다.");
+		}
+		else {
+			System.out.println("결제내역은 다음과 같습니다.");
+		}
+		return null;
+	}
+	
+	//HttpSession : interface를 활용하여, 세션을 빠르게 구현하는 방식 스타일
+	@PostMapping("/loginok.do")
+	public String loginok(@RequestParam(value = "", required = false) String mid, HttpSession session) {
+		if(mid != null || mid != "") {
+			session.setAttribute("mid", mid);
+			session.setMaxInactiveInterval(1800);			
+		}
+		
+		return null;
+	}
+	
+	/*
+	@PostMapping("/loginok.do")
+	public String loginok(String mid, HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		session.setAttribute("mid", mid);
+		session.setMaxInactiveInterval(1800);
+		System.out.println(mid);
+		
+		return null;
+	}
+	*/
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/ajaxok3.do")
