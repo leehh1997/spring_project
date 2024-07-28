@@ -2,7 +2,9 @@ package com.navershop.www;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,6 +60,27 @@ public class web_Controller {
 		return null;
 	}
 	*/
+	
+	@CrossOrigin(origins = "*", allowedHeaders = "*")
+	@PostMapping("/ajaxok4.do")
+	public String ajaxok4(@RequestBody String basket, HttpServletResponse res) throws Exception{
+		System.out.println(basket);
+		JSONArray ja = new JSONArray(basket);
+		for(int f=0; f<ja.length(); f++) {
+			JSONObject jo = ja.getJSONObject(f);
+			String seq = jo.getString("seq");
+			System.out.println(seq);
+			String product = jo.getString("product");
+			System.out.println(product);
+			String price = jo.getString("price");
+			System.out.println(price);
+		}
+		
+		this.pw = res.getWriter();
+		this.pw.print("ok");
+		
+		return null;
+	}
 	
 	@CrossOrigin(origins = "*", allowedHeaders = "*")
 	@PostMapping("/ajaxok3.do")
